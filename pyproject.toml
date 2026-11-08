@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adoFai-tlm"
+version = "1.1.0"
+description = "Together Level Manager —— ADOFAI（冰与火之舞）TGT 关卡批量管理 / 解包 / 归档工具"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [{ name = "ThisisYLaaa" }]
+keywords = ["adofai", "ttkbootstrap", "level-manager", "tgt"]
+classifiers = [
+  "Programming Language :: Python :: 3.12",
+  "Environment :: Win32 (MS Windows)",
+  "Topic :: Games/Entertainment",
+  "License :: OSI Approved :: Apache Software License",
+]
+dependencies = ["ttkbootstrap==1.10.1", "colorama==0.4.6"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+tlm = "tlm.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/ThisisYLaaa/ADOFAI-TLM"
+
+[tool.setuptools]
+packages = ["tlm", "tlm.ui"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
