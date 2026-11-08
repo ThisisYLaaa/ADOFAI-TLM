@@ -1,2 +1,5 @@
+# 运行依赖（GUI）
 ttkbootstrap==1.10.1
 colorama==0.4.6
+
+# 开发/测试依赖：pip install pytest
