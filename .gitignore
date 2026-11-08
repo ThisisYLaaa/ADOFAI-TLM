@@ -1,7 +1,29 @@
+# Python
 __pycache__/
-.trae
-.vscode
-.venv
-Cache
-Example
-Save
+*.py[cod]
+*.egg-info/
+build/
+dist/
+*.spec
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# 编辑器
+.vscode/
+.trae/
+.idea/
+
+# 程序运行时目录 / 设置
+Cache/
+Example/
+Save/
+tlm_settings.json
+tl_settings_*.json
+
+# 测试与工具
+.pytest_cache/
+.coverage
+htmlcov/
