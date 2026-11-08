@@ -54,10 +54,15 @@ def test_clear_directory_removes_files_but_keeps_root(tmp_path):
     assert list(tmp_path.iterdir()) == []
 
 
-def test_get_7z_path_returns_none_for_bogus_override(monkeypatch):
+def test_find_7z_returns_none_when_nothing_matches(tmp_path, monkeypatch):
+    """显式路径无效、Together 目录里没有、PATH 里也没有时，应当返回 None。"""
+    monkeypatch.setattr("tlm.paths.shutil.which", lambda _name: None)
     monkeypatch.delenv("TLM_7Z", raising=False)
-    monkeypatch.setenv("TLM_TOGETHER_DIR", str(__import__("tempfile").gettempdir()))
-    assert FileUtils.get_7z_path(str(os.path.join("Z:", "nope.exe"))) is None or True
+    monkeypatch.setenv("TLM_TOGETHER_DIR", str(tmp_path))
+
+    from tlm.paths import find_7z
+
+    assert find_7z(str(tmp_path / "missing.exe")) is None
 
 
 def test_describe_7z_lookup_is_helpful():
