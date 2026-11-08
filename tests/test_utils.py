@@ -54,15 +54,34 @@ def test_clear_directory_removes_files_but_keeps_root(tmp_path):
     assert list(tmp_path.iterdir()) == []
 
 
-def test_find_7z_returns_none_when_nothing_matches(tmp_path, monkeypatch):
-    """显式路径无效、Together 目录里没有、PATH 里也没有时，应当返回 None。"""
-    monkeypatch.setattr("tlm.paths.shutil.which", lambda _name: None)
+def test_find_7z_prefers_explicit_path(tmp_path, monkeypatch):
+    """显式指定的可执行文件优先级最高。"""
     monkeypatch.delenv("TLM_7Z", raising=False)
-    monkeypatch.setenv("TLM_TOGETHER_DIR", str(tmp_path))
+    fake = tmp_path / "7z.exe"
+    fake.write_bytes(b"stub")
 
     from tlm.paths import find_7z
 
-    assert find_7z(str(tmp_path / "missing.exe")) is None
+    assert find_7z(str(fake)) == str(fake)
+
+
+def test_find_7z_honours_env_override(tmp_path, monkeypatch):
+    fake = tmp_path / "7z-env.exe"
+    fake.write_bytes(b"stub")
+    monkeypatch.setenv("TLM_7Z", str(fake))
+
+    from tlm.paths import find_7z
+
+    assert find_7z() == str(fake)
+
+
+def test_probe_7z_reports_candidates():
+    from tlm.paths import probe_7z
+
+    probed = probe_7z()
+    assert probed, "候选列表不应为空"
+    assert all(isinstance(path, str) and isinstance(ok, bool) for path, ok in probed)
+    assert any(path.lower().endswith("7z.exe") for path, _ in probed)
 
 
 def test_describe_7z_lookup_is_helpful():
